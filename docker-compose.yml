@@ -2,13 +2,20 @@ version: '3.8'
 
 services:
   nextjs:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     depends_on:
       - postgres
     environment:
+      - NODE_ENV=development
       - DATABASE_URL=postgres://user:password@postgres:5432/dbProject
+    volumes:
+      - .:/app  # Monte le projet local dans le conteneur
+      - /app/node_modules  # Évite d’écraser node_modules
+    command: npm run dev  # Lance le mode développement
 
   postgres:
     image: postgres:15
