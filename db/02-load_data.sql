@@ -1,6 +1,6 @@
 -- Charger le fichier JSON brut dans une table temporaire
 COPY temp_json_data(data)
-FROM 'data/complaints.json/docker-entrypoint-initdb.d/complaints.json'
+FROM '/docker-entrypoint-initdb.d/complaints.json'
 WITH (FORMAT text);
 
 -- Insérer les données dans la table finale
