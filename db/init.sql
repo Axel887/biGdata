@@ -1,7 +1,7 @@
 -- Création de la table principale
 CREATE TABLE IF NOT EXISTS crimes (
-    id SERIAL PRIMARY KEY,
-    full_complaint_id BIGINT PRIMARY KEY,
+    id SERIAL PRIMARY KEY, -- Génère automatiquement un identifiant unique
+    full_complaint_id BIGINT UNIQUE, -- Assure l'unicité mais pas une clé primaire
     complaint_year_number INT NOT NULL,
     month_number INT NOT NULL,
     record_create_date TIMESTAMP NOT NULL,
@@ -21,7 +21,7 @@ DO $$
 DECLARE
     json_data JSONB;
 BEGIN
-    -- Vérifier si le fichier existe
+    -- Vérifier si le fichier JSON existe
     PERFORM pg_ls_dir('docker-entrypoint-initdb.d') WHERE pg_ls_dir = 'complaints.json';
     IF NOT FOUND THEN
         RAISE NOTICE 'Le fichier complaints.json est introuvable.';
@@ -35,10 +35,24 @@ BEGIN
     );
 
     -- Insérer les données dans la table principale
-    INSERT INTO crimes
+    INSERT INTO crimes (
+        full_complaint_id,
+        complaint_year_number,
+        month_number,
+        record_create_date,
+        complaint_precinct_code,
+        patrol_borough_name,
+        county,
+        law_code_category_description,
+        offense_description,
+        pd_code_description,
+        bias_motive_description,
+        offense_category,
+        arrest_date,
+        arrest_id
+    )
     SELECT *
     FROM json_populate_recordset(NULL::crimes, json_data);
 
     RAISE NOTICE 'Les données ont été insérées avec succès.';
 END $$;
-
