@@ -18,20 +18,21 @@ services:
     command: npm run dev  # Lance le mode développement
 
   postgres:
-  build:
-    context: ./db  # Le répertoire où se trouve votre Dockerfile
-    dockerfile: Dockerfile  # Le Dockerfile utilisé pour construire le conteneur
-  container_name: postgres_db
-  restart: always
-  environment:
-    POSTGRES_USER: user
-    POSTGRES_PASSWORD: password
-    POSTGRES_DB: db_project
-  ports:
-    - "5432:5432"
-  volumes:
-    - postgres-data:/var/lib/postgresql/data  # Volume pour persister les données
-
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    image: postgres:17
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db_project
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin
