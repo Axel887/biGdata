@@ -1,5 +1,6 @@
 -- Création de la table principale
 CREATE TABLE IF NOT EXISTS crimes (
+    id SERIAL PRIMARY KEY,
     full_complaint_id BIGINT PRIMARY KEY,
     complaint_year_number INT NOT NULL,
     month_number INT NOT NULL,
