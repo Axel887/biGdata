@@ -13,7 +13,7 @@ const CrimeBarChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/api/crimes/stats');
+        const response = await fetch('http://localhost:3000/api/crimes/stats');
         const result = await response.json();
 
         const formattedData = result.map((item) => ({

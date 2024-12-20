@@ -21,7 +21,7 @@ const CrimeMapStatic = () => {
   useEffect(() => {
     const fetchCrimeData = async () => {
       try {
-        const response = await fetch('/api/crimes/county');
+        const response = await fetch('http://localhost:3000/api/crimes/county');
         const data = await response.json();
         setCrimeData(data);
       } catch (error) {

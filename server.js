@@ -1,15 +1,13 @@
-import { Pool } from 'pg';
-import { notifyClients } from '../../app/api/socket.js';
+import pkg from 'pg'; // Importer le module pg comme un package par défaut
+const { Pool } = pkg; // Déstructurer pour obtenir Pool
 
 export const pool = new Pool({
-    user: 'user',         // Nom d'utilisateur PostgreSQL
-    host: 'postgres',    // Utilisez "postgres" si vous êtes dans Docker
-    database: 'db_project',   // Nom de la base de données
-    password: 'password', // Mot de passe PostgreSQL
-    port: 5432,           // Port par défaut de PostgreSQL
-  });
-
-export default pool;
+  user: 'user',
+  host: 'postgres',
+  database: 'db_project',
+  password: 'password',
+  port: 5432,
+});
 
 export async function getAllCrimes() {
   const result = await pool.query('SELECT * FROM crimes');
@@ -45,14 +43,11 @@ export async function createNewCrime() {
     )`,
     Object.values(newCrime)
   );
-
-  // Notification des clients WebSocket
-  notifyClients({ type: 'NEW_CRIME', data: newCrime });
 }
 
+// Générer les données d'un nouveau crime
 async function generateNewCrimeData() {
   try {
-    // Récupérer un crime aléatoire pour générer les données
     const result = await pool.query('SELECT * FROM crimes ORDER BY RANDOM() LIMIT 1');
     const crime = result.rows[0];
 
@@ -60,16 +55,12 @@ async function generateNewCrimeData() {
       throw new Error('Aucun crime existant trouvé pour générer un nouveau crime.');
     }
 
-    // Générer un nouvel identifiant unique pour le crime
     const now = new Date();
-    const newFullComplaintId = Math.floor(Date.now() / 1000) + Math.floor(Math.random() * 1000); // Générer un ID unique basé sur le timestamp
-
-    // Créer un nouvel enregistrement basé sur le crime existant
     const newCrime = {
-      full_complaint_id: newFullComplaintId,           // Nouvel ID unique
-      complaint_year_number: now.getFullYear(),        // Année courante
-      month_number: now.getMonth() + 1,               // Mois courant
-      record_create_date: now.toISOString(),          // Date courante avec heure
+      full_complaint_id: Math.floor(Date.now() / 1000) + Math.floor(Math.random() * 1000),
+      complaint_year_number: now.getFullYear(),
+      month_number: now.getMonth() + 1,
+      record_create_date: now.toISOString(),
       complaint_precinct_code: crime.complaint_precinct_code,
       patrol_borough_name: crime.patrol_borough_name,
       county: crime.county,
@@ -78,8 +69,8 @@ async function generateNewCrimeData() {
       pd_code_description: crime.pd_code_description,
       bias_motive_description: crime.bias_motive_description,
       offense_category: crime.offense_category,
-      arrest_date: now.toISOString(),                 // Date courante avec heure
-      arrest_id: `A${Math.floor(Math.random() * 100000000)}`, // Nouvel ID d'arrestation unique
+      arrest_date: now.toISOString(),
+      arrest_id: `A${Math.floor(Math.random() * 100000000)}`,
     };
 
     return newCrime;
