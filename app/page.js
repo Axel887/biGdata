@@ -16,14 +16,12 @@ export default function HomePage() {
       <main className="space-y-12">
         {/* Graphique des catégories de crimes */}
         <section className="bg-white shadow rounded-lg p-6">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-            Répartition des Crimes par Offense
-          </h2>
+          
           <div className="overflow-auto">
             <OffenseCrimesPieChart />
           </div>
         </section>
-
+        <br/>
         {/* Graphique des crimes par biais raciaux */}
         <section className="bg-white shadow rounded-lg p-6">
           <h2 className="text-2xl font-semibold text-gray-700 mb-4">
@@ -35,9 +33,7 @@ export default function HomePage() {
         </section>
 
         <section className="bg-white shadow rounded-lg p-6">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-            Capitale du crime
-          </h2>
+          <br/>
           <div className="overflow-auto">
             <CrimeMap/>
           </div>
